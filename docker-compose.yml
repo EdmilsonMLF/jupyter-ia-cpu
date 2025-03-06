@@ -1,0 +1,26 @@
+services:
+  jupyter:
+    image: jupyter_ia  # Nome da imagem local construída
+    container_name: jupyter_ia_container_gpu
+    restart: unless-stopped
+    ports:
+      - "8888:8888"
+    volumes:
+      - ~/jupyter-files:/home/jovyan/work
+      - ~/.local:/root/.local
+    environment:
+      - JUPYTER_ENABLE_LAB=yes
+      - NB_USER=jovyan
+      - NB_UID=1000
+      - NB_GID=1000
+      - CHOWN_HOME=yes
+      - GRANT_SUDO=yes
+      - JUPYTER_TOKEN=minhasenha  # Troque por uma senha segura
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+
